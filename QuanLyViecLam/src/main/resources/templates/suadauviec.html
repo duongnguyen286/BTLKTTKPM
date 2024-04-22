@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th= "http://www.thymeleof.org">
+<head>
+  <title>Chi tiết đầu việc</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2 >Chi tiết đầu việc</h2>
+  <form class="form-horizontal" th:object="${dauviec}" th:action="@{update/{id}(id=${dauviec.id})}"
+        th:method="POST">
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Id đầu việc:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" th:value="${dauviec.id}" name="id" readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Tên đầu việc:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" th:value="${dauviec.ten}" name="ten">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Mô tả:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" th:value="${dauviec.moTa}" name="moTa">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Thời hạn:</label>
+      <div class="col-sm-10">
+        <input type="Date" class="form-control"  th:value="${dauviec.thoiHan}" name="thoiHan">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">Mã đầu việc:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" th:value="${dauviec.maDV}"  name="maDV" readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default col-sm-12 btn-primary">Thêm</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

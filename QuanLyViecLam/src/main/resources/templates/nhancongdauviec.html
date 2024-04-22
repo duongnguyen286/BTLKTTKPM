@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th= "http://www.thymeleof.org">
+<head>
+  <title>Thêm nhân công</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+  <h2 >Thông tin đầu việc:</h2>
+  <form class="form-horizontal" th:object="${dauviec}" th:action="@{/suadauviec/{id}(id=${dauviec.id})}"
+        th:method="GET">
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Id đầu việc:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" th:value="${dauviec.id}" name="id" readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Tên đầu việc:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" th:value="${dauviec.ten}" name="ten" readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Mô tả:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" th:value="${dauviec.moTa}" name="moTa" readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" >Thời hạn:</label>
+      <div class="col-sm-10">
+        <input type="Date" class="form-control"  th:value="${dauviec.thoiHan}" name="thoiHan" readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2">Mã đầu việc:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" th:value="${dauviec.maDV}"  name="maDV" readonly>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default col-sm-12 btn-primary">Chỉnh sửa đầu việc</button>
+      </div>
+    </div>
+  </form>
+  <h2 >Danh sách nhân công làm đầu việc:</h2>
+
+  <div class="container">
+  <table class="table ">
+    <thead class="table-success">
+    <tr>
+      <th>STT</th>
+      <th>Tên</th>
+      <th>Ngày sinh</th>
+      <th>Địa chỉ</th>
+      <th>Email</th>
+      <th>Mã nhân công</th>
+      <th>Xóa</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="nhancong, index : ${nhancongs}">
+      <td th:text="${index.index + 1}"></td>
+      <td th:utext = "${nhancong.ten}"></td>
+      <td th:utext = "${nhancong.ngaySinh}"></td>
+      <td th:utext = "${nhancong.diaChi}"></td>
+      <td th:utext = "${nhancong.email}"></td>
+      <td th:utext = "${nhancong.maNC}"></td>
+      <td>
+<!--        Nhận biến thứ 2 để chuyển về đúng trang đang thao tác-->
+        <form method="POST" th:action="@{/nhancongdauviec/delete/{id}(id=${nhancong.id}, iddauviec = ${dauviec.id})}">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Ban co chac chan muon xoa nhan cong ra khoi dau viec nay?')">Xóa</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+  <h2 >Thêm nhân công vào đầu việc:</h2>
+  <div class="container">
+    <table class="table ">
+      <thead class="table-success">
+      <tr>
+        <th>STT</th>
+        <th>Tên</th>
+        <th>Ngày sinh</th>
+        <th>Địa chỉ</th>
+        <th>Email</th>
+        <th>Mã nhân công</th>
+        <th>Thêm</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="nhancong, index : ${nhancongs_available}">
+        <!-- Sử dụng th:text để hiển thị giá trị của biến index + 1 -->
+        <td th:text="${index.index + 1}"></td>
+        <td th:text="${nhancong.ten}"></td>
+        <td th:text="${nhancong.ngaySinh}"></td>
+        <td th:text="${nhancong.diaChi}"></td>
+        <td th:text="${nhancong.email}"></td>
+        <td th:text="${nhancong.maNC}"></td>
+        <td>
+          <form method="POST" th:action="@{/nhancongdauviec/add (idnhancong=${nhancong.id}, iddauviec = ${dauviec.id})}">
+            <button type="submit" class="btn btn-success" onclick="return confirm('Ban co chac chan muon them nhan cong vao dau viec nay?')">Thêm</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+</body>
+</html>
