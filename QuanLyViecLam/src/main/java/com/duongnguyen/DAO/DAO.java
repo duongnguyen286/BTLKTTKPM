@@ -21,7 +21,7 @@ public class DAO {
 
   private static final String insert_dauviec = "insert into dauviec values(?, ?, ?, ?,?)";
   private static final String delete_dauviec = "delete from dauviec where id = ?";
-  private static String search_by_name_dauviec = "SELECT * FROM dauviec where 1=1    ";
+  private static String search_by_name_dauviec = "SELECT * FROM dauviec";
 
   private static final String delete_nhancong_in_dauviec = "DELETE FROM nhancongdauviec\n"
       + "WHERE idNhanCong = ?;";
@@ -131,8 +131,10 @@ public class DAO {
 
   public List<DauViec> searchDauViec(String key) {
     List<DauViec> list = new ArrayList<>();
-
-    search_by_name_dauviec += "AND (ten LIKE '%" + key + "%' OR moTa LIKE '%" + key + "%')";
+// SELECT * FROM dauviec WHERE (ten LIKE '%key%') OR (moTa LIKE '%key%');
+//    SELECT * FROM dauviec
+//    WHERE (ten LIKE '%8%') OR (moTa LIKE '%z%') OR (maDV LIKE '%dv005%') OR (maDV LIKE '%dv005%');
+    search_by_name_dauviec = "SELECT * FROM dauviec WHERE (ten LIKE '%" + key + "%') OR (moTa LIKE '%" + key + "%') OR (maDV LIKE '%" + key +"%')" ;
 
     try {
       PreparedStatement pr = Ps.ConnectDB().prepareStatement(search_by_name_dauviec);

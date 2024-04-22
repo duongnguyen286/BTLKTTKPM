@@ -3,6 +3,7 @@ package com.duongnguyen.Controller;
 import com.duongnguyen.DAO.DAO;
 import com.duongnguyen.Model.DauViec;
 import com.duongnguyen.Model.NhanCong;
+import jakarta.websocket.server.PathParam;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +22,12 @@ private DAO DAO = new DAO();
 
 
 @GetMapping("/dauviec")
-  public String getAllDauViec(Model model){
+  public String getAllDauViec(Model model, @RequestParam(value = "keyword", required = false) String keyword){
   List<DauViec> list = DAO.getAllDauViec();
+
+  if (keyword!=null) {
+    list = DAO.searchDauViec(keyword);
+  }
   model.addAttribute("dauviecs", list);
   return  "dauviecs";
 }
