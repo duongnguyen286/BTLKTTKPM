@@ -4,6 +4,7 @@ import com.duongnguyen.DAO.DAO;
 import com.duongnguyen.Model.DauViec;
 import com.duongnguyen.Model.NhanCong;
 import jakarta.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,17 +76,28 @@ private DAO DAO = new DAO();
     }
 
 
-//    Thêm việc làm
+//    Liên quan đến việc làm
+  //////////////////////////
 @GetMapping("/nhancongdauviec/{id}")
-public String getThemNhanCong(Model model, @PathVariable int id) {
+public String getThemNhanCong(Model model, @PathVariable int id, @RequestParam(value = "keyword", required = false) String keyword) {
   model.addAttribute("id", id);
   DauViec dauviec = DAO.getDauViec(id);
   model.addAttribute("dauviec", dauviec);
 
+  // Lấy danh sách nhân công làm đầu vệc
   List<NhanCong> list = DAO.getNhanCongsByDauViec(id);
   model.addAttribute("nhancongs", list);
 
-  List<NhanCong> listnhancongavailable = DAO.getNhanCongsAvailable();
+  List<NhanCong> listnhancongavailable = new ArrayList<>();
+  if (keyword!=null){
+    // search danh sach nhan cong chua lam gi
+    listnhancongavailable = DAO.searchNhanCongsAvailable(keyword);
+  }else {
+    // Lấy all danh sách nhân công chưa làm gì
+    listnhancongavailable = DAO.getNhanCongsAvailable();
+  }
+
+
   model.addAttribute("nhancongs_available", listnhancongavailable);
   return "nhancongdauviec";
 }

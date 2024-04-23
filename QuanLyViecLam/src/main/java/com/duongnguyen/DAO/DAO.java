@@ -35,6 +35,15 @@ public class DAO {
       + "FROM nhancong\n"
       + "WHERE id NOT IN (SELECT idNhanCong FROM nhancongdauviec);";
 
+
+    // Câu lên truy vấn tìm nhân công đang sẵn sàng:
+//  SELECT * FROM nhancong
+//  WHERE id NOT IN (SELECT idNhanCong FROM nhancongdauviec)
+//  AND ten LIKE '%keyword%';
+  private static String search_nhancongs_available= "SELECT * FROM nhancong " +
+        "WHERE id NOT IN (SELECT idNhanCong FROM nhancongdauviec) " +
+        "AND ten LIKE ?;";
+
   private static String insert_nhancongdauviec = "INSERT INTO nhancongdauviec (idNhanCong, idDauViec)\n"
       + "VALUES (?,?);";
 
@@ -101,7 +110,7 @@ public class DAO {
   }
 
   public static void addDauViec(DauViec dauviec) {
-    System.out.println("Hamf adddauviec duoc goi");
+    System.out.println("Ham adddauviec duoc goi");
     try {
       PreparedStatement ps = Ps.ConnectDB().prepareStatement(insert_dauviec);
       ps.setInt(1, dauviec.getId());
@@ -186,6 +195,30 @@ public class DAO {
     List<NhanCong> list = new ArrayList<>();
     try {
       PreparedStatement pr = Ps.ConnectDB().prepareStatement(select_nhancongs_available);
+      ResultSet rs = pr.executeQuery();
+      while (rs.next()){
+        int id = rs.getInt("id");
+        String ten = rs.getString("ten");
+        Date ngaySinh = rs.getDate("ngaySinh");
+        String diaChi = rs.getString("diaChi");
+        String email = rs.getString("email");
+        String maNC = rs.getString("maNC");
+
+        NhanCong nhancong = new NhanCong(id, ten, ngaySinh, diaChi, email, maNC);
+        list.add(nhancong);
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return list;
+  }
+
+  // Tìm kiếm nhân công đang ss theo tên
+  public List<NhanCong> searchNhanCongsAvailable(String keyword){
+    List<NhanCong> list = new ArrayList<>();
+    try {
+      PreparedStatement pr = Ps.ConnectDB().prepareStatement(search_nhancongs_available);
+      pr.setString(1, "%" + keyword + "%");
       ResultSet rs = pr.executeQuery();
       while (rs.next()){
         int id = rs.getInt("id");
